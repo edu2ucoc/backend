@@ -37,10 +37,13 @@ public class HomeController {
             @RequestParam("uploadFile") MultipartFile uploadFile, // 파일을 받아서 전달
             HttpServletRequest req) {
 
-        // 0. 일반 데이터
+        // 0. 일반 데이터 -> age, name, addr 확인
         System.out.println(member.toString());
 
         // 1. 파일 저장할 경로 획득 (여기서는 톰켓내부, 실제는 클라우드의 스토리지 선택)
+        //    스프링부트가 작동할려면 s/w 필요 (was(Web Application Server) 서버)
+        //    was 서버에 *.jar 파일을 배포되야 서버가 작동!!
+        //    was 서버 : tomcat, ..., 인텔리J는 톰켓 내장하고 있음
         String path     = req.getServletContext().getRealPath(""); // 저장한 위치(서버측)
         System.out.println("path:" + path);
         String filename = uploadFile.getOriginalFilename();	// 파일명
@@ -48,6 +51,7 @@ public class HomeController {
 
         // 2. 저장 -> 클라우드상의 스토리지에 저장 권장
         try {
+            // I/O를 이용하여 파일 저장
             File file = new File(path + "/" + filename);
             BufferedOutputStream bos =  new BufferedOutputStream( new FileOutputStream(file) );
             bos.write(uploadFile.getBytes());
