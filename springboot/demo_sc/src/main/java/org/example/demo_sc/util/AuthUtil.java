@@ -1,5 +1,7 @@
 package org.example.demo_sc.util;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,4 +12,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthUtil {
     // 서브에 구성하는 메소드 -> DI선언후, 메소드 사용
+    public boolean isUserAuth() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null && auth.isAuthenticated(); // 필요시 더 꼼꼼하게 체크 가능함(조건추가가능)
+    }
+    public String getUsername() {
+        if( isUserAuth() )
+            return SecurityContextHolder.getContext().getAuthentication().getName();
+        return null;
+    }
 }
