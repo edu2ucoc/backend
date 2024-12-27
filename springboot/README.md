@@ -586,3 +586,17 @@
     - 엔티티 상세 작업
     - application.properties -> yml 파일로 변경 처리(계층 표현)
     - 상세구현
+
+# 소스기반 개별 기술 확인
+    - backend_1
+        - restapi + swagger + JS : 차트 그리기
+        - 웹소켓을 이용한 실시간 채팅 (네이버 뉴스 검색) : 챗팅방식
+    - aop_test
+        - aop
+        - 로그/로깅
+        - 관리및 유지보수, 편의성
+    - test_mybatis
+        - maven 빌드 (pom.xml)
+        - 디비연동 mybatis 
+    - upload_test
+        - 파일업로드 (ajax, html form)

@@ -1,0 +1,294 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0">Chatbot</h1>
+				</div><!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item active">Chatbot Ajax & socket.io</li>
+					</ol>
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card direct-chat direct-chat-primary" style="position: relative; left: 0px; top: 0px;">
+						<div class="card-header ui-sortable-handle" style="cursor: move;">
+							<h3 class="card-title">챗봇(팅)</h3>
+							
+						</div>
+
+						<div class="card-body">
+
+							<div class="direct-chat-messages">
+							</div>
+
+
+							<div class="direct-chat-contacts">
+								<ul class="contacts-list">
+									<li>
+										<a href="#">
+											<img class="contacts-list-img" src="dist/img/user1-128x128.jpg"
+												alt="User Avatar">
+											<div class="contacts-list-info">
+												<span class="contacts-list-name">
+													Count Dracula
+													<small class="contacts-list-date float-right">2/28/2015</small>
+												</span>
+												<span class="contacts-list-msg">How have you been? I was...</span>
+											</div>
+
+										</a>
+									</li>
+
+									<li>
+										<a href="#">
+											<img class="contacts-list-img" src="dist/img/user7-128x128.jpg"
+												alt="User Avatar">
+											<div class="contacts-list-info">
+												<span class="contacts-list-name">
+													Sarah Doe
+													<small class="contacts-list-date float-right">2/23/2015</small>
+												</span>
+												<span class="contacts-list-msg">I will be waiting for...</span>
+											</div>
+
+										</a>
+									</li>
+
+									<li>
+										<a href="#">
+											<img class="contacts-list-img" src="dist/img/user3-128x128.jpg"
+												alt="User Avatar">
+											<div class="contacts-list-info">
+												<span class="contacts-list-name">
+													Nadia Jolie
+													<small class="contacts-list-date float-right">2/20/2015</small>
+												</span>
+												<span class="contacts-list-msg">I'll call you back at...</span>
+											</div>
+
+										</a>
+									</li>
+
+									<li>
+										<a href="#">
+											<img class="contacts-list-img" src="dist/img/user5-128x128.jpg"
+												alt="User Avatar">
+											<div class="contacts-list-info">
+												<span class="contacts-list-name">
+													Nora S. Vans
+													<small class="contacts-list-date float-right">2/10/2015</small>
+												</span>
+												<span class="contacts-list-msg">Where is your new...</span>
+											</div>
+
+										</a>
+									</li>
+
+									<li>
+										<a href="#">
+											<img class="contacts-list-img" src="dist/img/user6-128x128.jpg"
+												alt="User Avatar">
+											<div class="contacts-list-info">
+												<span class="contacts-list-name">
+													John K.
+													<small class="contacts-list-date float-right">1/27/2015</small>
+												</span>
+												<span class="contacts-list-msg">Can I take a look at...</span>
+											</div>
+
+										</a>
+									</li>
+
+									<li>
+										<a href="#">
+											<img class="contacts-list-img" src="dist/img/user8-128x128.jpg"
+												alt="User Avatar">
+											<div class="contacts-list-info">
+												<span class="contacts-list-name">
+													Kenneth M.
+													<small class="contacts-list-date float-right">1/4/2015</small>
+												</span>
+												<span class="contacts-list-msg">Never mind I found...</span>
+											</div>
+
+										</a>
+									</li>
+
+								</ul>
+
+							</div>
+
+						</div>
+
+						<div class="card-footer">
+							
+								<div class="input-group">
+									<input type="text" name="message" placeholder="메세지 입력"
+										class="form-control" id="inputForm">
+									<span class="input-group-append">
+										<button type="button" class="btn btn-primary" id="inputBtn">Send</button>
+									</span>
+								</div>
+							
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<!-- socket.io CDN -->
+	<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+	<script>
+		/**
+		 * 기능 정리
+		 * 	- 오른쪽 상단 툴기능(접기, 닫기, 대화참여자등) 제거
+		 *  - 메세지(질문등) 작성 엔터, send 버튼 클릭 => 이벤드 발생 => 서버측 전송 처리
+		 *  - 입력된 내용은 입력창 제거(비운다)
+		 *  - 사용자의 입력 내용은 오른쪽 채팅창에 세팅
+		 *  - 서버측으로 메세지 전송시 방법은 (ajax(단방향통신) or socket.io(쌍방소켓통신)를 활용)
+		 *  	- 접속을 하면, 서버측에서 메세지 전송 "어떤 뉴스가 궁금하신가요?"
+		 * 		- 관심 주제를 전송 ex) "오늘의 주식 이슈"
+		 * 		- 서버측에서는 해당 메세지(주제)를 획득 => 네이버 뉴스 검색 (최신 10건만 )
+		 * 			- 백엔드에서 외부 http 통신(open api)을 수행
+		 * 		- 관련 내용 가져와서 클라이언트에게 전송(json)
+		 *  - 서버측 메세지는 왼쪽 창에 세팅 (해당 뉴스를)
+		 *  - 대화 내용은 자동 스크롤 (최신 내용이 입력창 위에서 보이게 처리)
+		 */
+		const KEY_CODE_ENTER = 13; // 엔터키
+		
+		// TODO IO-STEP #008 서버 소켓 연결
+		const socket = io('http://localhost:9092');
+		// TODO IO-STEP #008-1 소켓이 연결되었다 이벤트 등록 및 처리
+		socket.on('connect',    ()=>{
+			console.log('서버 접속 OK');
+		});
+		socket.on('disconnect', ()=>{
+			console.log('서버 접속 해제 OK');
+		});
+		socket.on('svr_init_msg', data=>{
+			console.log('서버측 메세지', data);
+			// 화면 왼쪽에 출력
+			setMessage( 'left', data );
+		});
+		socket.on('svr_news', data=>{
+			//console.log('서버측 메세지', data);	
+			// data에서 items를 추출
+			// data는 문자열 => JSON 객체로 변환 처리
+			const { items } = JSON.parse( data );
+			// let titles = items.map( item => item.title );
+			// let links  = items.map( item => item.link );
+			// console.log('뉴스 결과', titles);
+			// console.log('뉴스 결과', links);
+			// 응답 결과 구성
+			let result_array = items.map( item => {
+				return `
+					<li><a href="${item.link}">${item.title}</a></li>
+				`;
+			});
+			// 배열 => 모든 요소들을 한개의 문자열로 합치기  => join("구분자")
+			//console.log( result_array.join(' ') );
+			
+			// 화면 왼쪽에 출력
+			setMessage( 'left', result_array.join(' ') );
+		});
+
+		function initEvent () {
+			// 채팅(봇) 화면에 대한 이벤트 초기화
+			// 메세지(질문등) 작성 엔터, send 버튼 클릭 => 이벤드 발생
+			// 입력창 특정 -> 엔터 이벤트를 리슨처리(이벤트핸들러 연결)
+			//$('#inputForm').css('backgroundColor','pink');
+			$('#inputForm').on('keypress', evt => {
+				const { keyCode } = evt;
+				if( keyCode == KEY_CODE_ENTER ) { // 엔터키를 특정해서 조건처리
+					// console.log( evt ); 
+					checkInputMessage();
+				}				
+			});
+			// send 버튼을 찾아서, click 이벤트 등록
+			$('#inputBtn').on('click', ()=>{
+				checkInputMessage();
+			});
+		}
+		function checkInputMessage () {
+			// 사용자 입력값 추출 -> 공백제거, 값이 빈값이면 팝업처리 => 유효성폼처리
+			let msg = $('#inputForm').val().trim();
+			if( msg === '') {
+				alert('메세지를 입력후 전송하세요');
+				return;
+			}
+			// 서버로 전송
+			sendMessage( msg );
+			// 입력창에 입력된 글자 삭제
+			$('#inputForm').val('');
+		}
+		function sendMessage ( msg ) {
+			// 1. 채팅 대화 내역에 메세지 추가 
+			setMessage( 'right', msg );
+			//setMessage( 'left', "> "+msg );
+			// 2. TODO IO-STEP #002 서버측 전송 처리
+			console.log( '서버 전송 메세지 ', msg);
+			// 클라이언트 -> 서버 메세지 전송
+			socket.emit('cvr_news', msg);
+		}
+		function setMessage ( dir='right', msg ) {
+			// 유저, 서버측 메시지 화면 처리
+			let user_dummy_name = '비';
+			let user_dummy_date = new Date();			
+			
+			let msg_html = '';
+			if( dir === 'right' ) {
+				// 유저 메세지 , JS ` => 파이썬 ''' or """
+				msg_html = `<div class="direct-chat-msg right">
+					<div class="direct-chat-infos clearfix">
+						<span class="direct-chat-name float-right">${ user_dummy_name }</span>
+						<span class="direct-chat-timestamp float-left">${ user_dummy_date }</span>
+					</div>
+					<img class="direct-chat-img" src="dist/img/avatar5.png" alt="message user image">
+					<div class="direct-chat-text">
+						${ msg }
+					</div>
+				</div>`;
+			}else{
+				// 서버 메세지
+				msg_html = `<div class="direct-chat-msg">
+					<div class="direct-chat-infos clearfix">
+						<span class="direct-chat-name float-left">뉴스봇</span>
+						<span class="direct-chat-timestamp float-right">${user_dummy_date}</span>
+					</div>
+					<img class="direct-chat-img" src="dist/img/avatar2.png" alt="message user image">
+					<div class="direct-chat-text">
+						${ msg }
+					</div>
+				</div>`;
+			}
+			// 동적으로 구성된 메세지를 화면에 추가!!
+			// 1. 메세지창 특정해서, 메세지를 동적 추가
+			$('.direct-chat-messages').append( msg_html );
+
+			// 스크롤 처리
+			//$('.direct-chat-messages').scrollTop();
+			// 2000은 정교하게 계산된 값이 아닌, 큰값을 임의로 적용
+			document.querySelector('.direct-chat-messages').scrollBy(0, 2000);
+		}
+
+		// TODO IO-STEP #001 : 함수 호출을 통해서 이벤트 초기화 진행
+		initEvent();
+	</script>
+</div>
+<!-- /.content-wrapper -->

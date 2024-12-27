@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: test_mybatis
+  # DB 연동 정보
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/board
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# MyBatis 설정 정보
+# ~/resources/mybatis-config.xml
+# ~/resources/mapper/BoardMapper.xml
+mybatis:
+  # My-batis의 전역 구성 파일의 위치 지정 
+  config-location: classpath:mybatis-config.xml
+  # mapper 파일들의 위치(파일) 지정
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.demo

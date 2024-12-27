@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>파일업로드</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <fieldset>
+        <h2>AJAX 전송</h2>
+        <form id="fileForm">
+            <div>
+                <!--더미 데이터-->
+                <input type="text" name="age"><br>
+                <input type="text" name="name"><br>
+                <input type="text" name="addr"><br>
+                <!--파일 데이터-->
+                <input type="file" name="uploadFile">
+            </div>
+            <div>
+                <button id="btnUpload">ajax 파일업로드</button>
+            </div>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <h2>html 업로드</h2>
+        <form action="/api/files/upload" method="post" enctype="multipart/form-data">
+            <label for="file">업로드할 파일 선택:</label>
+            <input type="file" id="file" name="file" required>
+            <button type="submit">form 업로드</button>
+        </form>
+    </fieldset>
+    </div>
+    <script>
+        $("#btnUpload").on('click', function (e) {
+            e.preventDefault(); // form 전송 이벤트 무효화 처리
+            console.log("파일 업로드");
+            // 서버측으로 데이터 전송, 폼데이터 + 파일 => 멀티파트 폼데이터, 방식: ajax
+            $.ajax({
+                url: "/upload",                            // 서버측 주소
+                type: "post",                              // 전송 방식
+                data: new FormData($("#fileForm")[0]),     // 보내고자 하는 데이터
+                enctype: "multipart/form-data",            // 데이터의 마임 타입 형식
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (res) {                   // 통신 성공하면 등록한 함수가 호출됨
+                    if (res.code == -1) {
+                        alert("파일 업로드 실패");
+                    } else if (res.code == 1) {
+                        alert("파일 업로드 성공 " + res.message);
+                    }
+                },
+                error: function (err) {  // 통신 실패하면 등록한 함수가 호출됨
+                    alert("오류:" + err);
+                }
+            });
+            return false;
+        });
+    </script>
+</body>
+</html>

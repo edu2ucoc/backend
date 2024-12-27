@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	1. xml 선언부(필수, 무조건)
+	2. DTD 이하 xml로 기술하는 내용에 대한 문법 제시
+	3. mapper를 통해서 sql문이 한정받는 클레스 지정
+	   namespace=@Mapper로 정의된 인터페이스가 설정(jpa의 repository) : dao에서 담당
+ -->
+<mapper namespace="com.example.demo.mapper.BoardMapper">
+	<!-- 요구사항 board.tb_board에 존재하는 모든 데이터를 가져와라 sql를 구성 -->
+	<!-- 
+		id:아래 쿼리를 수행하는 메소드명(BoardMapper 내부에 존재)  
+		resultType : 결과를 받을 그릇 -> dto
+	-->
+	<select id="getAllBoardList" resultType="com.example.demo.dto.Board">
+		select * from tb_board order by board_id desc;
+	</select>
+	
+</mapper>

@@ -1,0 +1,303 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0">Dashboard</h1>
+				</div><!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item active">Dashboard v1</li>
+					</ol>
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="container-fluid">
+			<!-- Small boxes (Stat box) -->
+			<div class="row">
+				<div class="col-md-6">
+
+
+
+					<div class="card card-danger">
+						<div class="card-header">
+							<h3 class="card-title">Donut Chart</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
+								<button type="button" class="btn btn-tool" data-card-widget="remove">
+									<i class="fas fa-times"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chartjs-size-monitor">
+								<div class="chartjs-size-monitor-expand">
+									<div class=""></div>
+								</div>
+								<div class="chartjs-size-monitor-shrink">
+									<div class=""></div>
+								</div>
+							</div>
+							<canvas id="donutChart"
+								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 317px;"
+								width="634" height="500" class="chartjs-render-monitor"></canvas>
+						</div>
+
+					</div>
+
+
+
+				</div>
+
+				<div class="col-md-6">
+
+
+					<div class="card card-success">
+						<div class="card-header">
+							<h3 class="card-title">Bar Chart</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
+								<button type="button" class="btn btn-tool" data-card-widget="remove">
+									<i class="fas fa-times"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class=""></div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="barChart"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 317px;"
+									width="634" height="500" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+
+					</div>
+
+
+
+
+				</div>
+
+			</div>
+
+
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<h3 class="card-title">jsGrid</h3>
+						</div>
+						<!-- /.card-header -->
+						<div class="card-body">
+							<div id="jsGrid1"></div>
+						</div>
+						<!-- /.card-body -->
+					</div>
+				</div>
+			</div>
+
+		</div><!-- /.container-fluid -->
+	</section>
+
+	<script>
+		// 바로 위에 차트 자리에 있는 요소를 엑세스하여 차트및 테이블을 완성
+		// TODO #PORC1 1. 통신
+		axios.get('/api/sales')
+			.then(res => { // 정상응답
+				// TODO #PORC1 8-1 통신 성공 => 차트 그리기 시작
+				// 통신 응답이 오면 아래 코드 진행
+				// 200번대 응답이 오면 정상 처리 진행
+				console.log(res);
+				const { data } = res; // sales의 11개 집계 데이터를 획득
+				console.log(data);
+				makeChart(data);	   // 차트 동적으로 만들기 
+				
+				initJsGrid(data);     // 테이블(게시판) 구성
+			})
+			.catch(err => { // 통신상 오류
+				// TODO #PORC1 8-2 통신 실패 => 팝업 처리
+				alert('통신 오류');
+			})
+			.finally(() => { // 성공이던 실패이던 무조건 진입
+
+			});
+
+		// 2. 통신이 끝나면 차트 그리기
+		// TODO #PORC1 9 응답데이터에서 차트 구성에 필요한 데이터 추출
+		function makeChart(data) {
+			// 2-1. 차트 그리기에 필요한 데이터 형태로 파싱 
+			// 2-1-1. data에서 category값만 추출한다 => 형태는 배열
+			// data => [ { ... }, { ... }, ...]
+			// sale은 밑에 데이터를 의미 한다
+			/*
+			{
+				"category": "home_appliance",
+				"cnt": 2134,
+				"price": 1654915.1,
+				"amount": 45483092
+			}
+			*/
+			const categories = data.map(sale => sale.category)
+			console.log(categories); // [ 'Food', 'drink', '..', ..  ]
+			// 2-1-2. 평균 판매가 추출
+			const prices = data.map(sale => sale.price)
+			console.log(prices); // [ 201202, 409493, 444, ...]
+			// 2-1-3. 도넛 차트의 각 데이터의 색상값 랜덤하게 구성
+			let colors = data.map(sale => getRandomColor()) // [ '0xffffff', ... ]
+
+			// 2-2. 차트에 데이터 주입
+			// prices를 % 단위로 로 표현 (단위는 생략)
+			//        식 = 개별값(prices) / 전체합산값(?) * 100 => %단위로 환산됨 => 이렇게 표현되도록 prices 처리하시오
+			let prices_all_sum = prices.reduce((pv, cv) => pv + cv);
+			// https://www.w3schools.com/js/js_math.asp 참고
+			// 리뷰시간에 소수점 2째자리까지 표현 처리!!, round;반올림처리, 
+			let per_prices = prices.map(price => Math.round(price / prices_all_sum * 100, 2));
+
+			initDChart(categories, per_prices, colors);  // 비율로 표현
+			//initDChart( categories, prices, colors );// 원값으로 표현
+
+			// 바차트 호출
+			let amounts = data.map(sale => sale.amount) // 카테고리별 판매량 추출 => 배열반환
+			initBarChart(categories, prices, amounts);
+		}
+		// TODO #PORC1 9-1 : 데이터의 개수만큼 색상 반복 생성
+		function getRandomColor() {
+			let r = Math.floor(Math.random() * 256);
+			let g = Math.floor(Math.random() * 256);
+			let b = Math.floor(Math.random() * 256);
+			// 랜덤하게 칼라 생성
+			return `rgb(${r} , ${g}, ${b})`;
+		}
+		// TODO #PORC1 10 : 차트에 데이터를 주입하여 차트 완성
+		function initDChart(cate_labels, prices, colors) {
+			// 실제 도넛 차트 그리기			
+			// 1. 문서 전체에서 id값이 donutChart인 요소를 찾아서 -> 2D 그래픽 컨텍스트 객체를 획득해라
+			var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+
+			// 2. 차트를 그릴려면 => 데이터가 필요 => 데이터 
+			var donutData = {
+				// 카테고리값 세팅
+				labels: cate_labels, // 도넛 차트의 레이블(여기서는 카테고리값)
+				datasets: [
+					{
+						data: prices, // 도넛 차트의 개별 레이블당 크기값
+						backgroundColor: colors,
+					}
+				]
+			}
+			var donutOptions = {
+				maintainAspectRatio: false,
+				responsive: true,
+			}
+			//Create pie or douhnut chart
+			// You can switch between pie and douhnut using the method below.
+			new Chart(donutChartCanvas, {
+				type: 'doughnut',
+				data: donutData,
+				options: donutOptions
+			})
+		}
+	
+		// 바차트 구성
+		function initBarChart( labels, prices, amounts ) {
+			// 1. 문서상에 존재하는 모든 ID중 값이 barChart인 요소를 찾아서, 2D 컨텍스트 객체 획득			
+			//    차트를 그릴 대상 객체 획득
+			const barChartCanvas = $('#barChart').get(0).getContext('2d')
+			// 2. 실데이터 준비
+			let areaChartData = {
+				// 카데고리 항목
+				labels,
+				datasets:[
+					// 맴버 2개, 평균가격, 평균판매량 => y 축 공유시 값의 단위환산이 중요(단위통일필요) 
+					{
+						label               : 'Category별 평균가격',
+						backgroundColor     : 'rgba(60,141,188,0.9)',
+						borderColor         : 'rgba(60,141,188,0.8)',
+						pointRadius          : false,
+						pointColor          : '#3b8bba',
+						pointStrokeColor    : 'rgba(60,141,188,1)',
+						pointHighlightFill  : '#fff',
+						pointHighlightStroke: 'rgba(60,141,188,1)',
+						data                : prices
+					}
+					// 단위 환산 고려 : 값의 범위가 서로 다르므로, 단위를 맞춰준다
+					//               : ex) %단위, 최소값(0)-최대값(1) 정규화 처리, ..
+					//               : y축을 양쪽을 모두 활용하여 표현 (각각의 단위를 살릴수 있음)
+					,
+					{
+						label               : 'Category별 평균판매량',
+						backgroundColor     : 'rgba(160,41,188,0.9)',
+						borderColor         : 'rgba(160,41,188,0.8)',
+						pointRadius          : false,
+						pointColor          : '#3b8bba',
+						pointStrokeColor    : 'rgba(160,41,188,1)',
+						pointHighlightFill  : '#fff',
+						pointHighlightStroke: 'rgba(160,41,188,1)',
+						data                : amounts
+					}
+				]
+			}			
+			var barChartOptions = {
+				responsive              : true,
+				maintainAspectRatio     : false,
+				datasetFill             : false
+			}
+
+			new Chart(barChartCanvas, {
+				type: 'bar',
+				data: areaChartData,
+				options: barChartOptions
+			})
+		}
+	
+		// jsgrid를 이용한 테이블 구성
+		// 적정량(소량)의 데이터를 가져와서 다양한 처리를 즉시 방영
+		// 페이징, 편집, GRUD, 검색, 정렬등 사용 가능
+		function initJsGrid ( data ) {
+			// 테이블 생성 옵션
+			let options = {
+				locale : 'ko',		// 한국어
+				height : "100%",    // 높이
+				width  : "100%",    // 너비
+				sorting: true,		// 데이터 정렬 사용 -> 컬럼을 클릭하면 반영
+				paging : true,      // 한 화면에 나오는 데이터개수 제한 => 페이징반영
+				pageSize: 5,		// 테이블 페이지당 노출되는 데이터 수
+				pageButtonCount:5,  // 페이지 이동에 관련된 버튼수 최대 5개로 제한
+				
+				// 뿌려질 데이터 설정
+				data   : data,
+				// 컬럼 설정
+				fields: [
+					{ name: "category", type: "text",   width: 150 },
+					{ name: "cnt",      type: "number", width: 200, title:"총 구매 개수" },
+					{ name: "price",    type: "number", width: 200, title:"평균 가격" },
+					{ name: "amount",   type: "number", title:"평균 판매량" },
+					
+				]
+			};
+			// 테이블 생성 코드
+			// jsgrid를 설치하면 jQuery에서 기본 라이브러리로 확장됨
+			$("#jsGrid1").jsGrid( options );
+		}
+	</script>
+</div>
+<!-- /.content-wrapper -->

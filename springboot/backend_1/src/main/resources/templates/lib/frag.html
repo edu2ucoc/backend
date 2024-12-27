@@ -1,0 +1,12 @@
+<!-- 
+	- 모든 페이지에 공통으로 들어가는 조각들을 모은 html 	
+-->
+<div th:fragment="formErrorFrag" class="alert alert-danger" role="alert" th:if="${ #fields.hasAnyErrors() }">
+	<div th:each="err : ${ #fields.allErrors() }" th:text="${err}" />
+</div>
+
+<div th:fragment="loginError" th:if="${param.error}">
+    <div class="alert alert-danger">
+        로그인 실패. 사용자 정보를 확인 후 다시 이용해주세요.
+    </div>
+</div>
