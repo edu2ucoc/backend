@@ -29,6 +29,8 @@ public class AroundLoggingAspect {
 		long e = System.currentTimeMillis(); // GMT+9시간
 		// 4. 소요시간 = 호출완료-호출되기전		
 		log.info("method " + joinPoint.getSignature() + " 실행시간 " + (e-s) + " ms");
+		// 목적 : 로그를 통해서 메소드의 수행시갖 체크 => 평균, 병목구간 점검, 눈에 띠는 지연시간 되면 -> 분석, 개선
+		// 해당 코드에 세팅하지 않고,관찰을 통해서 수집 => 유지보수!!
 	}	
 }
 
