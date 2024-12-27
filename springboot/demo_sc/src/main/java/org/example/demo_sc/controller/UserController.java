@@ -1,8 +1,12 @@
 package org.example.demo_sc.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.demo_sc.dto.UserDto;
 import org.example.demo_sc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,4 +45,16 @@ public class UserController {
         // 3. 회원가입 성공후 로그인 이동
         return "redirect:/login"; // or "redirect:/" <= 홈으로 포워딩 -> 보안걸려서 -> 로그인이동함
     }
+
+    // 로그아웃 작성
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // 1. 인증 해제(로그아웃), (요청, 응답, 현재 사용자의 인증정보를 전달)
+        new SecurityContextLogoutHandler().logout(request, response,
+                SecurityContextHolder.getContext().getAuthentication());
+
+        // 2. 최종 로그인으로 이동
+        return "redirect:/login";
+    }
+
 }

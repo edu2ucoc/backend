@@ -18,5 +18,18 @@
     <fieldset>
         <a href="/signup">회원가입 이동</a>
     </fieldset>
+    <fieldset>
+        <!-- 로그아웃 등장 -->
+        <div sec:authorize="isAuthenticated()">
+            <!-- 인증된 사용자만 볼수 있는 콘텐츠 -->
+            <!-- 사용자명의 실데이터가 이메일 -> name은 이메일로 체크되야함 -->
+            Welcome <span sec:authentication="name"></span>
+            <a href="/logout">로그아웃</a>
+        </div>
+        <div sec:authorize="isAnonymous()">
+            <!-- 인증되지 않은 유저에게 노출된다 -->
+            <a href="/login">로그인</a>
+        </div>
+    </fieldset>
 </body>
 </html>
