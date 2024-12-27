@@ -41,6 +41,8 @@ dependencies {
   	
   	// TODO IO-STEP #003 socket.io의 자바 지원 모듈
   	// https://github.com/mrniko/netty-socketio
+	// 실시간 웹소켓을 이용한 통신용 모듈
+	// 보안관제->실시간 모니터링 (스트리밍서비스, 웹소켓통신,..), 챗봇, AI와 연동되는 대화형툴, 차트, 채팅
 	implementation 'com.corundumstudio.socketio:netty-socketio:2.0.11'
 }
 
