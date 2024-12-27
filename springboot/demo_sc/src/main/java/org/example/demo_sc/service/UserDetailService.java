@@ -27,6 +27,7 @@ public class UserDetailService implements UserDetailsService {
         // userRepository를 이용하여 쿼리 수행, 재료 username_email -> 유저획득
         // 메소드 확장 제공, findBy컬럼명 -> 확장됨
         // 이메일로 조회 => 비번은 내부적으로 사용하여 조회 => 회원 여부 판단
+        System.out.println("사용자 정보 전달 : " + username_email);
         return this.userRepository.findByEmail(username_email)
                 .orElseThrow( ()->new IllegalArgumentException(username_email));
     }

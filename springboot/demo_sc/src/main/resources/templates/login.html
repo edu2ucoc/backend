@@ -5,7 +5,16 @@
     <title>로그인</title>
 </head>
 <body>
-    <fieldset></fieldset>
+    <fieldset>
+        <form action="/login" method="post">
+            <!-- 스프링시큐리티에서 사용한 이름이 username, 실데이터는 email -->
+            <input type="text" name="username" id="username" placeholder="Email"/>
+            <br/>
+            <input type="password" name="password" id="password" placeholder="Password"/>
+            <br/>
+            <input type="submit" value="로그인"/>
+        </form>
+    </fieldset>
     <fieldset>
         <a href="/signup">회원가입 이동</a>
     </fieldset>

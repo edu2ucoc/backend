@@ -74,7 +74,7 @@ public class AppSecurityConfig {
     public AuthenticationManager authenticationManager(HttpSecurity http,
            BCryptPasswordEncoder bCryptPasswordEncoder,
            UserDetailsService userDetailsService) throws Exception {
-
+        System.out.println("1회성 인증 관리자 등록 여부 체크");
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 // 인증관련하여 디비에 쿼리를 수행하여 존재여부 체크
                 .userDetailsService(this.userDetailsService)
