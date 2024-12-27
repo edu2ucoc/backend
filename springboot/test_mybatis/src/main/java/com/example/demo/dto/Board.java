@@ -11,6 +11,8 @@ import lombok.Setter;
 /**
  * tb_board 테이블을 조회하여 
  * 나온 결과를 담는(들고있는, 연결X) 그릇(데이터 1개를 표방함) -> DTO
+ *
+ * 롬복의 게더, 세터, toString, has.. -> @Data
  */
 @Getter
 @Setter

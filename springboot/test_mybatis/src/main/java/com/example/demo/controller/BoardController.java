@@ -13,6 +13,8 @@ import com.example.demo.service.BoardService;
 public class BoardController {
 	@Autowired
 	private BoardService boardService;
+
+	// 게시판 내용을 요청하는 api
 	@GetMapping("/boards")
 	public List<Board> boards() {
 		return boardService.getAllBoardList();

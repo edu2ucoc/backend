@@ -3,6 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+	<!-- 매퍼가 추가되면 지속석으로 추가 -->
 	<mappers>
 		<mapper resource="mapper/BoardMapper.xml"/>
 	</mappers>

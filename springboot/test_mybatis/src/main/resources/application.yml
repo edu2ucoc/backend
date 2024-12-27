@@ -16,4 +16,5 @@ mybatis:
   config-location: classpath:mybatis-config.xml
   # mapper 파일들의 위치(파일) 지정
   mapper-locations: classpath:mapper/*.xml
+  # 패키지명 다르면 조정
   type-aliases-package: com.example.demo
