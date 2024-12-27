@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 
 /**
  * Controller 처리
+ *  - @Slf4j : 롬복의 로그 처리 어노테이션
  */
 @Slf4j
 @Controller
@@ -26,6 +27,7 @@ public class HomeController {
     public String home() {
         return "home";
     }
+
     // 2. ajax 업로드,  톰켓 내부 저장
     // 일반데이터 + 파일 동시 전송
     @PostMapping("/upload")
