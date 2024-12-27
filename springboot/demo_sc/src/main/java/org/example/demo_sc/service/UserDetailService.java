@@ -28,6 +28,6 @@ public class UserDetailService implements UserDetailsService {
         // 메소드 확장 제공, findBy컬럼명 -> 확장됨
         // 이메일로 조회 => 비번은 내부적으로 사용하여 조회 => 회원 여부 판단
         return this.userRepository.findByEmail(username_email)
-                .orElseThrow( ()->new Exception(username_email));
+                .orElseThrow( ()->new IllegalArgumentException(username_email));
     }
 }
