@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Component
 public class UtilExternalNet {
-	
+	// 저수준으로 http(s) 통신을 수행하는 코드 -> 그냥 사용하면됨
 	public static String get(String apiUrl, Map<String, String> requestHeaders){
         HttpURLConnection con = connect(apiUrl);
         try {

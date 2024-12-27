@@ -15,7 +15,8 @@ import com.corundumstudio.socketio.SocketIOServer;
  */
 @Component
 public class SocketIOServerRunner implements CommandLineRunner{
-	private final SocketIOServer server;	
+	// DI 생성자 방식을 lombok 없이 구성한 코드
+	private final SocketIOServer server;
 	public SocketIOServerRunner(SocketIOServer server) {
 		super();
 		this.server = server;
@@ -23,7 +24,7 @@ public class SocketIOServerRunner implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub	
-		// 소켓 IO 서버 가동
+		// 소켓 IO 서버 가동 -> 실시간 통신이 가능하게 처리된다!!
 		server.start();
 		System.out.println("소켓 IO 서버 가동!!");
 	}	

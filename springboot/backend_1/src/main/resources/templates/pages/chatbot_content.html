@@ -18,6 +18,7 @@
 	<!-- /.content-header -->
 
 	<!-- Main content -->
+	<!-- 채팅 화면 -->
 	<section class="content">
 		<div class="container-fluid">
 
@@ -30,7 +31,7 @@
 						</div>
 
 						<div class="card-body">
-
+							<!-- 동적으로 채팅 내용이 세팅된다!!-->
 							<div class="direct-chat-messages">
 							</div>
 
@@ -152,13 +153,14 @@
 		</div><!-- /.container-fluid -->
 	</section>
 
-	<!-- socket.io CDN -->
+	<!-- 검색어 전송 -> 네이버 검색어로 뉴스 검색 -> 결과를 응답(서버) -->
+	<!-- socket.io CDN <- 클라이언트(html 사용하는) 대상 -->
 	<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 	<script>
 		/**
 		 * 기능 정리
 		 * 	- 오른쪽 상단 툴기능(접기, 닫기, 대화참여자등) 제거
-		 *  - 메세지(질문등) 작성 엔터, send 버튼 클릭 => 이벤드 발생 => 서버측 전송 처리
+		 *  - 메세지(질문등) 작성 엔터, send 버튼 클릭 => 이벤트 발생 => 서버측 전송 처리
 		 *  - 입력된 내용은 입력창 제거(비운다)
 		 *  - 사용자의 입력 내용은 오른쪽 채팅창에 세팅
 		 *  - 서버측으로 메세지 전송시 방법은 (ajax(단방향통신) or socket.io(쌍방소켓통신)를 활용)
@@ -174,6 +176,7 @@
 		
 		// TODO IO-STEP #008 서버 소켓 연결
 		const socket = io('http://localhost:9092');
+
 		// TODO IO-STEP #008-1 소켓이 연결되었다 이벤트 등록 및 처리
 		socket.on('connect',    ()=>{
 			console.log('서버 접속 OK');
@@ -197,6 +200,7 @@
 			// console.log('뉴스 결과', links);
 			// 응답 결과 구성
 			let result_array = items.map( item => {
+				// 기사 제목, 기사 링크 연결하여 목록 구성
 				return `
 					<li><a href="${item.link}">${item.title}</a></li>
 				`;
@@ -244,6 +248,7 @@
 			// 2. TODO IO-STEP #002 서버측 전송 처리
 			console.log( '서버 전송 메세지 ', msg);
 			// 클라이언트 -> 서버 메세지 전송
+			// cvr_news : 임의의 이벤트명
 			socket.emit('cvr_news', msg);
 		}
 		function setMessage ( dir='right', msg ) {
