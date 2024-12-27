@@ -24,6 +24,7 @@ public class SalesService {
 		// List<SalesGroupBy> res 에 담아서 size() 출력
 		// TODO #PORC6 쿼리 결과를 DTO로 데이터 전환 처리
 		List<SalesGroupBy> res = new ArrayList<SalesGroupBy>();
+		// 인터페이스 객체 추출 -> DTO 세팅
 		for(SalesGroupByInterface sale : sales) {
 			// DTO 객체를 하나씩 생성해서 데이터를 세팅(데이터 교환)
 			SalesGroupBy data = SalesGroupBy.builder()

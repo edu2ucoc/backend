@@ -13,6 +13,7 @@ import lombok.ToString;
 
 // TODO #PORC5 쿼리 결과를 해당 객체를 생성하여 담아둔다
 public interface SalesGroupByInterface {
+	// 결과셋의 이름을 기반으로 get+이름(첫글자대문자) 인터페이스 구성, 메소드 선언으로
 	String getCategory();
 	int getCnt();
 	float getPrice();

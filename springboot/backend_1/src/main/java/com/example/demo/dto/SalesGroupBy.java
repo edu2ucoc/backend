@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 쿼리 결과를 받는 객체 준비
+ * 	- DTO 컨셉
+ */
 @Setter
 @Getter
 @NoArgsConstructor
