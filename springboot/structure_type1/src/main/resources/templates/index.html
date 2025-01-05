@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+      pre {
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    </style>
+</head>
+<body>
+  <h3>SSR을 단독으로 구성하는 Spring Boot 구조</h3>
+  <div>
+    <pre>
+    +---------------------+
+    |    Frontend/UI      |  <-- 클라이언트로 HTML 반환
+    +---------------------+
+    |   Spring Boot App   |  <-- 비즈니스 로직 처리 + 템플릿 엔진 사용
+    |    (Controller)     |
+    +---------------------+
+    |  Data Access Layer  |  <-- DB 연결 (JPA, MyBatis 등)
+    +---------------------+
+    |      Database       |
+    +---------------------+
+    </pre>
+  </div>
+</body>
+</html>
