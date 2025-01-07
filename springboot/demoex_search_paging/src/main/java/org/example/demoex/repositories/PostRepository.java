@@ -12,11 +12,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("select "
             + "distinct q "
             + "from Post q "
-            //+ "left outer join Review a on a.post=q "
-            + "where "
+            +  "where "
             + "   q.subject like %:kw% "
             + "   or q.content like %:kw% "
-            //+ "   or a.content like %:kw% "
             )
-    Page<Post> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
-}
+    t>  fi llByKeyword(@Param("kw") 
+    
