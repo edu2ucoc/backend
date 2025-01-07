@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 외부 라이브러리 모음
+    // jpa는 자바에서 데이터베이스 연동하는데 객체지향으로 사용하는 ORM 방식을 손쉽게 지원
+    // DB 제품이 변경되었도, SQL 수정 x
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // thymeleaf는 템플릿 엔진, SSR 담당
+    // html + 데이터 => 동적으로 html 생성(커스텀)하여 => 응답처리의 재료 구성 : 랜더링
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // web : 스프링부트 웹서비스 구성의 메인 라이브러리
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // lombok : getter/setter, 생성자, 빌더(객체 생성 도구)등을 자동으로 생성. 데브툴(생산성 향상)
+    compileOnly 'org.projectlombok:lombok'
+    // devtools : 소스 수정 -> 감시 -> 서버 재가동 자동처리(생산성 향상)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // h2 경량 DB, 별도 설치 필요없음 -> 나중에 RDB로 대체처리 -> JPA 사용시 자동으로 SQL 대응해줌
+    runtimeOnly 'com.h2database:h2'
+    // 롬복
+    annotationProcessor 'org.projectlombok:lombok'
+    // 단위테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // 써드파트 라이브러리 추가 (수동)
+    // https://mvnrepository.com/ -> 검색 -> 버전체크 -> grale(short) -> 카피 -> 붙여넣기
+    // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
+    // implementation 'com.mysql:mysql-connector-j:9.1.0'
+
+    // build.gradle 변화 -> 설치 (우측 바에 코끼리 아이콘 클릭 -> Gradle 밑에 바에 새로고침 버튼 클릭 -> 개발
+
+    // 템플릿 나누기, html을 쪼개서 공통부분 분할, 조립하여 화면을 구성(지원)하는 라이브러리
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    // 입력창 유효성 검사 및 폼 데이터 관리 모듈, 유효성 검사, 폼검사 지원
+    // html 가능, JS 가능, (*)백엔드 가능
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

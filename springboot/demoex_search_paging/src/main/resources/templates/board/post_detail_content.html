@@ -1,0 +1,73 @@
+<div th:fragment="frag_content" class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- 글 상세보기 뷰 -->
+                    <div class="container my-3">
+                        <div class="card my-3">
+                            <div class="card-header">
+                                <p th:text="${ post.getSubject() }"><span class="badge bg-danger">리뷰 n개</span></p>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-text" th:text="${ post.getContent() }">내용</div>
+                                <div class="badge bg-light text-primary text-start"
+                                     th:text="${ post.getCreateDate() }"
+                                >날짜
+                                </div>
+                            </div>
+                        </div>
+                        <a th:href="|/post/modify/${post.getId()}|" class="btn btn-success btn-sm">수정</a>
+                        <a th:href="|/post/delete/${post.getId()}|" class="btn btn-danger btn-sm">삭제</a>
+
+                    </div>
+
+                    <!-- 리뷰 등록 -->
+                    <div class="container my-3">
+
+                        <p class="border-bottom py-2 my-3">리뷰 등록</p>
+                        <!--/* 리뷰등록 url 적용 */-->
+                        <form th:action="|/review/create/${post.getId()}|"
+                              method="post" id="reviewForm">
+                            <!--
+                                - 프런트에서 유효성 점검
+                                - html5에서 추가된 입력 속성중 필수 입력 옵션 적용, 빈값체크
+                                    - required : 필수 입력, 비워 있다면 체킹됨
+                                - JS
+                                    - 길이체크, 빈값 체크, 타입체크등등 프런트에서 해결 가능함
+                                    - 장점 : 서버측으로 요청 x -> 서버 부하를 줄일 수 있다!!
+                                    - 순수 JS or jQuery 같은 라이브러리 사용
+                                    - </body> 닫히기 직전, 혹은 해당 코드 바로밑에서 사용가능
+                            -->
+                            <input type="text" name="content" id="content" />
+<!--                            <input type="text" name="content" id="content" required/>-->
+                            <input type="submit" value="리뷰 등록"/>
+                        </form>
+                    </div>
+
+                    <!-- 리뷰 목록 노출 -->
+                    <div class="container my-3">
+                        <!-- 리뷰-반복문 작성 -->
+                        <div class="card my-3 bg-warning" th:each="review : ${ post.getReviews()  }">
+                            <div class="card-body">
+                                <div class="card-text">
+                                    <!-- review는 엔티티 이다 => ReviewDto만들어서 교환 필요함 (차후) -->
+                                    [[ |
+                                        ${ review.getContent() } - ${ review.getCreateDate() }
+                                    | ]]
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <!-- 실습 : 리뷰 수정, 삭제 링크 세팅 -->
+                                <a th:href="|/review/modify/${review.getId()}|" class="btn btn-success btn-sm">수정</a>
+                                <a th:href="|/review/delete/${review.getId()}|" class="btn btn-danger btn-sm">삭제</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,70 @@
+<div th:fragment="frag_content" class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">게시판</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">게시판</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="my-3 border-bottom pb-1" th:text="${ 'Post 글 작성 폼' }"></h5>
+                    <!--
+                        - action="URL", URL쪽으로 데이터가 전달, "생략되면 현재 URL로 전송"
+                        - 현재 주소 : ~/post/create 전송된다!!
+
+                        - 유효성 검증용 폼 객체 적용 -> 이름 주의, 메소드에 전달한 변수명(클레스명에서 첫글자 소문자) 통일
+                    -->
+                    <form method="post" th:object="${postForm}">
+                        <!--
+                            - 유효성 검증 객체 : postForm를 통해서 오류 발생시(유효성 검사 결과), 에러 세팅되서 제공
+                            - 1. 에러를 체크하여 조건부 랜더링 수행 -> 작성후 복사 붙여넣기로 처리
+                            - 2. 키값 체크 => name="subject" => 삭제처리, 대체 th:field="*{subject}"
+                                - 데이터 전송시 키값 대응(등록), 데이터 수정시 기존값 세팅 자동 처리 (수정)
+
+                            - 타임리프에서 내장(외부라이브러리등) 된 모듈 사용 => #객체명.메소드()
+                                - #fields.hasAnyErrors() => 에러가 존재한다면!! (th:if) - 조건부랜더링
+                        -->
+                        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                            <!-- for each 방식, 에러를 하나씩 꺼내서 반복적으로 출력 -->
+                            <div th:each="error : ${#fields.allErrors()}" th:text="${error}"></div>
+                        </div>
+                        <div class="my-3">
+                            <label for="subject" class="form-label">제목</label>
+                            <!-- name 속성은 데이터의 키값, 없으면 데이터가 누락됨!! -->
+                            <input type="text" th:field="*{subject}" id="subject" class="form-control" placeholder="제목을 입력하세요">
+                        </div>
+                        <div class="my-3">
+                            <label for="content" class="form-label">본문</label>
+                            <textarea th:field="*{content}" id="content" class="form-control" rows="7"></textarea>
+                        </div>
+                        <div class="my-3">
+                            <input type="submit" value="저장하기" class="btn btn-warning">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>글목록</title>
+</head>
+<body>
+<div>
+    <h4>글 목록</h4>
+    <!-- 타임리프 템플릿 엔진을 이용한 값 찍기, 기타 구문 -->
+    <!-- 요소 내부(자식 요소)에 값 찍기 -->
+    <p th:text="${ dummy }"></p>
+    <!-- 직접 원하는 위치게 값 찍기 -->
+    <p>[[ ${ dummy } ]]</p>
+    <!-- 반복문 -> 게시판 생성 -->
+    <table border="1">
+        <thead>
+        <tr>
+            <th>글번호</th>
+            <th>글제목</th>
+            <th>작성시간</th>
+        </tr>
+        </thead>
+        <tbody>
+            <!-- 반복구간, 데이터 노출 -->
+            <tr th:each="post : ${ posts}">
+                <td th:text="${post.getId()}"></td>
+                <td th:text="${post.getSubject()}"></td>
+                <td th:text="${post.getCreateDate()}"></td>
+            </tr>
+            <!--            <tr>-->
+            <!--                <td>1</td>-->
+            <!--                <td>제목</td>-->
+            <!--                <td>오늘</td>-->
+            <!--            </tr>-->
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

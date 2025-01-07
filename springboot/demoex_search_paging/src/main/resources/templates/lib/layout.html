@@ -1,0 +1,21 @@
+<!--/* 모든 페이지에 공통으로 적용되는 레이아웃, 타임리프 주석 - 개발자만 볼수 있음 */-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>대시보드</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+  <!-- 페이지별로 JS를 무난하게 적용하기 위해 위치를 head 쪽으로 조정함 -->
+  <script src="/plugins/jquery/jquery.min.js"></script>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <th:block layout:fragment="content"></th:block>
+
+  <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+  <script src="/dist/js/adminlte.js"></script>
+</body>
+</html>

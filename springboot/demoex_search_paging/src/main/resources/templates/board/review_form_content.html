@@ -1,0 +1,35 @@
+<div th:fragment="frag_content" class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+					<h5 class="my-3 border-bottom pb-1" >Review 관리</h5>
+					<form method="post" th:object="${reviewForm}">
+						<!-- 에러처리 -->
+						<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+							<div th:each="error : ${#fields.allErrors()}" th:text="${error}"></div>
+						</div>
+						<div class="my-3">
+							<label for="content" class="form-label">본문</label>
+							<textarea th:field="*{content}" id="content" class="form-control" rows="7"></textarea>
+						</div>
+						<div class="my-3">
+							<input type="submit" value="저장하기" class="btn btn-warning">
+						</div>
+					</form>
+                </div>
+			</div>
+		</div>
+	</section>
+</div>
+
+
+
+
+
+
+
+
+
+

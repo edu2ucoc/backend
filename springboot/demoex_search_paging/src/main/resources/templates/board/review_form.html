@@ -1,0 +1,11 @@
+<html layout:decorate="~{lib/layout}">
+
+<div class="wrapper" layout:fragment="content">
+  <!-- <div th:replace="lib/preloader.html :: frag_preloader"></div> -->
+  <div th:replace="lib/navibar.html :: frag_navibar"></div>
+  <div th:replace="lib/left_sidebar.html :: frag_left_sidebar"></div>
+  <div th:replace="board/review_form_content.html :: frag_content"></div>
+  <div th:replace="lib/footer.html :: frag_footer"></div>
+</div>
+
+</html>

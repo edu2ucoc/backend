@@ -1,0 +1,31 @@
+<html layout:decorate="~{lib/layout}">
+
+<div class="wrapper" layout:fragment="content">
+<!--  <div th:replace="lib/preloader.html :: frag_preloader"></div>-->
+  <div th:replace="lib/navibar.html :: frag_navibar"></div>
+  <div th:replace="lib/left_sidebar.html :: frag_left_sidebar"></div>
+  <div th:replace="board/post_detail_content.html :: frag_content"></div>
+  <div th:replace="lib/footer.html :: frag_footer"></div>
+  <script>
+    // 리뷰 작성시 입력폼에 대한 검사 수행
+    $('#reviewForm').on('submit', (e) => {
+        // 1. submit 이벤트 무효화 (임시)
+        // e.preventDefault();
+        // 2. 값 체크
+        const reviewValue = $('#content').val().trim(); //공백제거
+        console.log("입력값", reviewValue, reviewValue.length);
+
+        // 3. 길이 체크 추가하여 반영, 빈값
+        if (reviewValue === ''  || reviewValue.length > 256) {
+          alert("정확하게 입력하세요");
+          return false;
+        }
+
+        // 4. 리뷰 등록 처리 진행
+        //return true;
+    });
+
+  </script>
+</div>
+
+</html>

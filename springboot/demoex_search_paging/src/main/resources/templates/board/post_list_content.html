@@ -1,0 +1,113 @@
+<div th:fragment="frag_index_content" class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Dashboard</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">영화 리뷰 게시판</h3>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <input type="text" id="search_kw" class="form-control" th:value="${kw}">
+                                    <button class="btn btn-outline-secondary" type="button" id="btn_search">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 100px">글번호</th>
+                                        <th>글 제목</th>
+                                        <th style="width: 100px">작성시간</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- TODO 페이징/검색 추가 4 : 게시물 노출 -->
+                                    <tr th:each="post, loop : ${ posts}">
+                                        <!-- 역순으로 글번호 표현 -->
+                                        <td th:text="${posts.getTotalElements - (posts.number * posts.size) - loop.index}"></td>
+                                        <td >
+                                            <a th:href="@{|/post/detail/${post.getId()}|}"
+                                               th:text="${post.getSubject()}"></a>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-danger" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- TODO 페이징/검색 추가 5 : 페이징 -->
+                        <div th:if="${!posts.isEmpty()}">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${!posts.hasPrevious} ? 'disabled'">
+                                    <a class="page-link" href="javascript:void(0)" th:data-page="${posts.number-1}">
+                                        <span>이전</span>
+                                    </a>
+                                </li>
+                                <li th:each="page: ${#numbers.sequence(0, posts.totalPages-1)}"
+                                    th:if="${page >= posts.number-5 and page <= posts.number+5}"
+                                    th:classappend="${page == posts.number} ? 'active'" class="page-item">
+                                    <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="${!posts.hasNext} ? 'disabled'">
+                                    <a class="page-link" href="javascript:void(0)" th:data-page="${posts.number+1}">
+                                        <span>다음</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- TODO 페이징/검색 추가 6 : 페이징 링크 처리 및 검색 처리 -->
+                        <script type='text/javascript'>
+                            const page_elements = document.getElementsByClassName("page-link");
+                            Array.from(page_elements).forEach(function (element) {
+                                element.addEventListener('click', function () {
+                                    document.getElementById('page').value = this.dataset.page;
+                                    document.getElementById('searchForm').submit();
+                                });
+                            });
+                            const btn_search = document.getElementById("btn_search");
+                            btn_search.addEventListener('click', function () {
+                                document.getElementById('kw').value = document.getElementById('search_kw').value;
+                                document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+                                document.getElementById('searchForm').submit();
+                            });
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+            <a th:href="@{/post/create2}" class="btn btn-dark">글 작성하기 + 유효성 검증기능추가</a>
+            <form th:action="@{/post/list}" method="get" id="searchForm">
+                <input type="hidden" id="kw" name="kw" th:value="${kw}">
+                <input type="hidden" id="page" name="page" th:value="${posts.number}">
+            </form>
+
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

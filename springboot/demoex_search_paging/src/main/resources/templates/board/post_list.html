@@ -1,0 +1,15 @@
+<html layout:decorate="~{lib/layout}">
+<!--/* 주석 : 타임리프 전체 레이아웃으로 대체, 그 내부에서 하위 내용 다시 세팅 */-->
+<div class="wrapper" layout:fragment="content">
+<!--  <div th:replace="lib/preloader.html :: frag_preloader"></div>-->
+  <!-- 모든 화면의 윗부분 담당 -->
+  <div th:replace="lib/navibar.html :: frag_navibar"></div>
+  <!-- 모든 화면의 왼쪽 담당 -->
+  <div th:replace="lib/left_sidebar.html :: frag_left_sidebar"></div>
+  <!-- 모든 화면의 실제 콘텐츠 담당, 각 페이지별로 다름 -->
+  <div th:replace="board/post_list_content.html :: frag_index_content"></div>
+  <!-- 모든 화면의 하단 부분 담당(카피라이터) -->
+  <div th:replace="lib/footer.html :: frag_footer"></div>
+</div>
+
+</html>

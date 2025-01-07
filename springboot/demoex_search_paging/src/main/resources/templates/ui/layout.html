@@ -1,0 +1,22 @@
+<!--/* 타임리프 주석, 모든 페이지의 공통 페이지(layout) 담당 */-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 인코딩 -->
+    <meta charset="UTF-8">
+    <!-- 뷰포트 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 기타 필요한 항목 : 제목, js, css, .... -->
+    <title>제목1</title>
+</head>
+<body>
+  <!--/*
+      - 디자인에 따라, 상하분할, 상/왼/하/오/본문 분할, .... 배치
+      - layout:fragment="content" -> content는 임의의 설정값
+      - <th:block ... ></th:block> -> 이 자리로 같은 이름을 가진 조각이 대체된다!!
+  */-->
+  <p>전</p>
+  <th:block layout:fragment="content"></th:block>
+  <p>후</p>
+</body>
+</html>
